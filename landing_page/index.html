@@ -94,7 +94,7 @@
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              amount: 19900, // 199 INR in paise
+              amount: 100, // 1 INR in paise (for testing)
               currency: 'INR'
             })
           });
@@ -134,9 +134,14 @@
                 }
 
                 alert('Payment successful! Your download will begin shortly.');
-                // Here you would redirect the user or trigger the PDF download
-                
-              } catch (verifyError) {
+                // Trigger the PDF download
+                const link = document.createElement('a');
+                link.href = 'How_to_Attract_Women.pdf';
+                link.download = 'How_to_Attract_Women.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                              } catch (verifyError) {
                 console.error(verifyError);
                 alert('Payment verification failed. Please contact support.');
               }
