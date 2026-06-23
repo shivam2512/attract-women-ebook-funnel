@@ -78,6 +78,20 @@
 
     </section>
 
+    <!-- Support Form -->
+    <section class="support" style="text-align: center; padding: 2rem; background: #111; color: #fff;">
+        <h3 style="font-family: 'Outfit', sans-serif; margin-bottom: 0.5rem;">Having Trouble Downloading?</h3>
+        <p style="font-size: 0.9rem; color: #ccc; margin-bottom: 1.5rem;">If your download didn't start automatically after a successful payment, email us at <strong style="color: #ff3b3b;">funnyverse05@gmail.com</strong> with your payment screenshot, or use the form below.</p>
+        <form name="support" method="POST" data-netlify="true" enctype="multipart/form-data" style="max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+            <input type="email" name="email" placeholder="Your Email Address" required style="padding: 12px; border-radius: 6px; border: none; font-family: 'Outfit', sans-serif;">
+            <div style="display: flex; flex-direction: column; text-align: left; gap: 5px;">
+                <label for="screenshot" style="font-size: 0.85rem; color: #aaa; font-family: 'Outfit', sans-serif;">Upload Payment Screenshot:</label>
+                <input type="file" name="screenshot" accept="image/*" required style="padding: 10px; border-radius: 6px; border: 1px solid #333; background: #222; color: #fff; font-family: 'Outfit', sans-serif;">
+            </div>
+            <button type="submit" style="padding: 12px; background: #ff3b3b; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 1rem; margin-top: 5px;">Get My Ebook Copy</button>
+        </form>
+    </section>
+
     <footer>
         <p>Copyright © 2026. All Rights Reserved.</p>
     </footer>
@@ -94,7 +108,7 @@
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              amount: 100, // 1 INR in paise (for testing)
+              amount: 19900, // 199 INR in paise
               currency: 'INR'
             })
           });
