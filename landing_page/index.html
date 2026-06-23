@@ -21,8 +21,8 @@
             <div class="badge">🔥 New Release</div>
             <h1>The Secret to <br><span class="gradient-text">Effortless Attraction</span></h1>
             <p class="subtitle">Stop relying on cheesy pickup lines. Master the psychology of genuine connection, unbreakable confidence, and natural charisma.</p>
-            <a href="YOUR_PAYU_PAYMENT_LINK_HERE" class="cta-btn buy-btn" style="text-decoration: none; display: inline-block;">Download the Ebook Now - ₹199</a>
-            <p class="guarantee">🔒 Secure checkout via PayU • Instant PDF Download</p>
+            <button id="buy-btn-1" class="cta-btn buy-btn" style="text-decoration: none; display: inline-block; cursor: pointer; border: none;">Download the Ebook Now - ₹199</button>
+            <p class="guarantee">🔒 Secure checkout via Razorpay • Instant PDF Download</p>
         </div>
         <div class="hero-image-container">
             <div class="glow-effect"></div>
@@ -74,7 +74,7 @@
             <span class="original-price">₹1499</span>
             <span class="current-price">₹199</span>
         </div>
-        <a href="YOUR_PAYU_PAYMENT_LINK_HERE" class="cta-btn buy-btn pulse" style="text-decoration: none; display: inline-block;">Get Instant Access</a>
+        <button id="buy-btn-2" class="cta-btn buy-btn pulse" style="text-decoration: none; display: inline-block; cursor: pointer; border: none;">Get Instant Access</button>
 
     </section>
 
@@ -82,7 +82,87 @@
         <p>Copyright © 2026. All Rights Reserved.</p>
     </footer>
 
-    <!-- PayU Checkout -->
-    <!-- Place your PayU Payment Link in the href attributes above. No JS needed. -->
+    <!-- Razorpay Checkout Setup -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      async function handleCheckout() {
+        try {
+          // 1. Create order on the backend
+          const response = await fetch('/api/create-order', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              amount: 19900, // 199 INR in paise
+              currency: 'INR'
+            })
+          });
+
+          if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.error || 'Failed to create order');
+          }
+
+          const order = await response.json();
+
+          // 2. Open Razorpay Checkout Modal
+          const options = {
+            key: "rzp_test_T4wkfKbFcbKbPw", // Frontend KEY_ID only
+            amount: order.amount,
+            currency: order.currency,
+            name: "Magnetism.",
+            description: "How to Attract Women Ebook",
+            order_id: order.order_id,
+            handler: async function (paymentResponse) {
+              // 3. Verify payment signature on the backend
+              try {
+                const verifyResponse = await fetch('/api/verify-payment', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    razorpay_order_id: paymentResponse.razorpay_order_id,
+                    razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                    razorpay_signature: paymentResponse.razorpay_signature
+                  })
+                });
+
+                if (!verifyResponse.ok) {
+                   throw new Error('Payment verification failed.');
+                }
+
+                alert('Payment successful! Your download will begin shortly.');
+                // Here you would redirect the user or trigger the PDF download
+                
+              } catch (verifyError) {
+                console.error(verifyError);
+                alert('Payment verification failed. Please contact support.');
+              }
+            },
+            theme: {
+              color: "#ff3b3b"
+            }
+          };
+
+          const rzp = new Razorpay(options);
+          
+          rzp.on('payment.failed', function (response){
+             console.error('Payment Failed:', response.error);
+             alert('Payment failed. Reason: ' + response.error.description);
+          });
+
+          rzp.open();
+
+        } catch (error) {
+          console.error(error);
+          alert('Could not initiate checkout: ' + error.message);
+        }
+      }
+
+      document.getElementById('buy-btn-1').addEventListener('click', handleCheckout);
+      document.getElementById('buy-btn-2').addEventListener('click', handleCheckout);
+    </script>
 </body>
 </html>
